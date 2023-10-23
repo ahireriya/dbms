@@ -1,0 +1,37 @@
+CREATE TABLE employees (
+    emp_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    salary DECIMAL(10,2)
+);
+CREATE VIEW high_earners AS
+    SELECT * FROM employees WHERE salary > 50000;
+CREATE INDEX emp_salary_index ON employees(salary);
+CREATE SEQUENCE emp_id_seq START 1 INCREMENT 1;
+CREATE SYNONYM emp_table FOR employees;
+ALTER TABLE employees
+ADD CONSTRAINT pk_emp_id PRIMARY KEY (emp_id);
+
+ALTER TABLE orders
+ADD CONSTRAINT fk_emp_id FOREIGN KEY (emp_id) REFERENCES employees(emp_id);
+INSERT INTO employees (emp_id, first_name, last_name, salary)
+VALUES (1, 'John', 'Doe', 60000);
+
+INSERT INTO employees (emp_id, first_name, last_name, salary)
+VALUES (2, 'Jane', 'Smith', 70000);
+SELECT * FROM employees WHERE salary > 60000;
+UPDATE employees SET salary = 65000 WHERE emp_id = 1;
+DELETE FROM employees WHERE emp_id = 2;
+SELECT * FROM employees WHERE salary BETWEEN 60000 AND 80000;
+SELECT first_name, last_name, UPPER(first_name) as upper_first_name 
+FROM employees;
+SELECT emp_id FROM employees
+UNION
+SELECT emp_id FROM orders;
+SELECT COUNT(*) FROM employees;
+SELECT e.first_name, o.order_id
+FROM employees e
+JOIN orders o ON e.emp_id = o.emp_id;
+SELECT emp_id, first_name, last_name
+FROM employees
+WHERE emp_id IN (SELECT emp_id FROM orders);
