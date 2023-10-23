@@ -1,0 +1,56 @@
+inner join 
+SELECT employees.emp_id, employees.first_name, orders.order_id
+FROM employees
+INNER JOIN orders ON employees.emp_id = orders.emp_id;
+
+left join 
+SELECT employees.emp_id, employees.first_name, orders.order_id
+FROM employees
+LEFT JOIN orders ON employees.emp_id = orders.emp_id;
+
+right join 
+SELECT employees.emp_id, employees.first_name, orders.order_id
+FROM employees
+LEFT JOIN orders ON employees.emp_id = orders.emp_id;
+
+full outer join 
+SELECT employees.emp_id, employees.first_name, orders.order_id
+FROM employees
+FULL OUTER JOIN orders ON employees.emp_id = orders.emp_id;
+
+
+self join
+SELECT e1.first_name AS employee, e2.first_name AS manager
+FROM employees e1
+JOIN employees e2 ON e1.manager_id = e2.emp_id;
+
+
+subquery in wheere clause 
+SELECT emp_id, first_name, last_name
+FROM employees
+WHERE emp_id IN (SELECT emp_id FROM orders);
+
+
+Subquery in FROM Clause (Derived Table):
+SELECT AVG(sub.salary) as avg_salary
+FROM (SELECT salary FROM employees WHERE salary > 50000) as sub;
+
+
+Subquery in SELECT Clause (Scalar Subquery):
+SELECT first_name, (SELECT MAX(salary) FROM employees) as max_salary
+FROM employees;
+
+
+Correlated Subquery:
+SELECT emp_id, first_name, last_name,
+  (SELECT MAX(order_date) FROM orders WHERE emp_id = employees.emp_id) as last_order_date
+FROM employees;
+
+
+View
+CREATE VIEW high_earners AS
+    SELECT emp_id, first_name, last_name, salary
+    FROM employees
+    WHERE salary > 60000;
+
+SELECT * FROM high_earners;
